@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  mongo:
+    image: mongo:latest
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: nosql
+      MONGO_INITDB_ROOT_PASSWORD: nosql
+      MONGO_INITDB_DATABASE: sio
+    ports:
+      - 27017:27017
+# here is waht the connection string look like -> mongodb://nosql:nosql@localhost:27017/?authMechanism=DEFAULT

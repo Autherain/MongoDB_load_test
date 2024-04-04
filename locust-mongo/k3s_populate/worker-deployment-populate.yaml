@@ -1,0 +1,40 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: locust-worker-deployment-populate
+  labels:
+    app: locust-worker-populate
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: locust-worker-populate
+  template:
+    metadata:
+      labels:
+        app: locust-worker-populate
+    spec:
+      containers:
+        - name: locust-worker
+          image: autherain/bnploadtest:1.0.0
+          imagePullPolicy: Always
+          env:
+            - name: LOCUST_OPTIONS
+              value: "--worker --master-host master-populate"
+          ports:
+            - containerPort: 8089
+          volumeMounts:
+            - name: load-file
+              mountPath: /load_test.py
+              subPath: mongo_populating.py
+            - name: settings-file
+              mountPath: /settings.py
+              subPath: settings.py
+      volumes:
+        - name: load-file
+          configMap:
+            name: load-file
+        - name: settings-file
+          configMap:
+            name: settings-file

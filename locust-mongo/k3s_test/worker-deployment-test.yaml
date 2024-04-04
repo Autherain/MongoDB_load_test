@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: locust-worker-deployment-test
+  labels:
+    app: locust-worker-test
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: locust-worker-test
+  template:
+    metadata:
+      labels:
+        app: locust-worker-test
+    spec:
+      containers:
+        - name: locust-worker
+          image : autherain/bnploadtest:1.0.0
+          imagePullPolicy: Always
+          env:
+            - name: LOCUST_OPTIONS
+              value: "--worker --master-host master-test"
+          ports:
+            - containerPort: 8089
+          volumeMounts:
+            - name: load-file
+              mountPath: /load_test.py
+              subPath: load_test.py
+            - name: settings-file
+              mountPath: /settings.py
+              subPath: settings.py
+      volumes:
+        - name: load-file
+          configMap:
+            name: load-file
+        - name: settings-file
+          configMap:
+            name: settings-file

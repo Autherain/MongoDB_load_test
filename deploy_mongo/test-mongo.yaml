@@ -1,0 +1,13 @@
+# Little pod to test connectivity to the kubernetes cluster form operator mongodb
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mongosh-pod
+spec:
+  containers:
+    - name: mongosh-container
+      image: mongo:latest # Use the official MongoDB Docker image
+      command: ["sleep", "infinity"] # Keep the container running indefinitely
+      stdin: true
+      tty: true

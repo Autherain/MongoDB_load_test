@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: locust-master-populate
+  labels:
+    app: locust-master-populate
+spec:
+  containers:
+  - name: locust-master-populate
+    image : autherain/bnploadtest:1.0.0
+    imagePullPolicy: Always
+    env:
+      - name: LOCUST_OPTIONS
+        value: "--master"
+    ports:
+    - containerPort: 8089
+    volumeMounts:
+      - name: load-file
+        mountPath: /mongo_populating.py
+        subPath: mongo_populating.py
+      - name: settings-file
+        mountPath: /settings.py
+        subPath: settings.py
+  volumes:
+    - name: load-file
+      configMap:
+        name: load-file
+    - name: settings-file
+      configMap:
+        name: settings-file
